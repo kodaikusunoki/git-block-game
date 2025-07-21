@@ -115,4 +115,20 @@ while running:
     time.sleep(0.02)
     pygame.display.flip()
     
-    
+# ゲーム終了後のスコアを表示
+screen.fill(BLACK)
+final_score_text = font.render(f"Game Over! Your score is {score}", True, WHITE)
+exit_text = font.render("Press 'Enter to Exit", True, WHITE)
+screen.blit(final_score_text, (width // 2 - final_score_text.get_width() // 2, height // 2 - final_score_text.get_height() // 2 - 20))
+screen.blit(exit_text, (width // 2 - exit_text.get_width() // 2, height // 2 - exit_text.get_height() // 2 + 20))
+pygame.display.flip() # 画面を更新
+
+waiting_for_exit = True
+while waiting_for_exit:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()     
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+            pygame.quit()
+            sys.exit()   
