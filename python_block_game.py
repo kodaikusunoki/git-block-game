@@ -37,8 +37,9 @@ paddle = pygame.Rect(paddle_x, paddle_y, paddle_width, paddle_height)
 
 # ボールの設定
 ball_radius = 10
-ball_speed_x = 10
-ball_speed_y = 10
+ball_speed_x = 8
+ball_speed_y = 8
+ball_speed_increase = 0.005
 ball = pygame.Rect(width // 2, height // 2, ball_radius * 2, ball_radius * 2)
 
 # ブロックの設定
@@ -61,9 +62,10 @@ for row in range(brock_rows):
     blocks.append(block_row)
 
 # カウントダウンの表示
+count_down_font = pygame.font.Font(None, 100)
 for i in range(3, 0, -1):
     screen.fill(BLACK)
-    count_down_text = font.render(f"{i}", True, WHITE)
+    count_down_text = count_down_font.render(f"{i}", True, WHITE)
     screen.blit(count_down_text, (width // 2 - count_down_text.get_width() // 2, height // 2 - count_down_text.get_height() // 2))
     pygame.display.flip()
     time.sleep(1)
@@ -102,6 +104,7 @@ while running:
     
     # ボールと壁の衝突
     if ball.left <= 0 or ball.right >= width:
+        ball_speed_y *= (1+ball_speed_increase) # 衝突によってボールの速度を上げる
         ball_speed_x = -ball_speed_x
     if ball.top <= 0:
         ball_speed_y = -ball_speed_y
@@ -112,12 +115,14 @@ while running:
     for row in blocks:
         for block in row:
             if ball.colliderect(block):
+                ball_speed_y *= (1+ball_speed_increase) # 衝突によってボールの速度を上げる
                 ball_speed_y = -ball_speed_y
                 row.remove(block)
                 score += 100
     
     # ボールとパドルの衝突
     if ball.colliderect(paddle):
+        ball_speed_y *= (1+ball_speed_increase) # 衝突によってボールの速度を上げる
         ball_speed_y = -ball_speed_y
    
     # 画面の描画
