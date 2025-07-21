@@ -30,12 +30,15 @@ paddle_height = 15
 paddle_speed = 15
 paddle_x = (width - paddle_width) // 2
 paddle_y = height - 30
+paddle_acceleration = 5
+left_passed_time = 0
+right_passed_time = 0
 paddle = pygame.Rect(paddle_x, paddle_y, paddle_width, paddle_height)
 
 # ボールの設定
 ball_radius = 10
-ball_speed_x = 7
-ball_speed_y = 7
+ball_speed_x = 10
+ball_speed_y = 10
 ball = pygame.Rect(width // 2, height // 2, ball_radius * 2, ball_radius * 2)
 
 # ブロックの設定
@@ -76,10 +79,22 @@ while running:
 
     # パドルの移動
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and paddle.left > 0:
-        paddle.left -= paddle_speed
-    if keys[pygame.K_RIGHT] and paddle.right < width:
-        paddle.right += paddle_speed
+    if keys[pygame.K_LEFT]:
+        left_passed_time += 1
+        right_passed_time = 0
+        paddle_speed = (10 + paddle_acceleration * left_passed_time) # パドルの加速度を計算
+        if paddle.left > 0:
+            paddle.left -= paddle_speed
+    elif keys[pygame.K_RIGHT]:
+        right_passed_time += 1
+        left_passed_time = 0
+        paddle_speed = (10 + paddle_acceleration * right_passed_time) # パドルの加速度を計算
+        if paddle.right < width:
+            paddle.right += paddle_speed
+    else:
+        left_passed_time = 0
+        right_passed_time = 0
+        paddle_speed = 10 # ボタンが押されていない時はパドルの速度を10に戻す
 
     # ボールの移動
     ball.left += ball_speed_x
