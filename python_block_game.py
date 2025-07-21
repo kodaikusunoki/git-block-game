@@ -57,6 +57,14 @@ for row in range(brock_rows):
         block_row.append(block)
     blocks.append(block_row)
 
+# カウントダウンの表示
+for i in range(3, 0, -1):
+    screen.fill(BLACK)
+    count_down_text = font.render(f"{i}", True, WHITE)
+    screen.blit(count_down_text, (width // 2 - count_down_text.get_width() // 2, height // 2 - count_down_text.get_height() // 2))
+    pygame.display.flip()
+    time.sleep(1)
+
 # スコアの設定
 score = 0
 # ゲームのメインループ
